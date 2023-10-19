@@ -30,18 +30,28 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import axios from 'axios';
 let name = '', email = '', password = '';
 function register() {
-    axios.post("http://localhost:8686/user",{
-        name:name,
-        email:email,
-        password:password
+    axios.post("http://localhost:8686/user", {
+        name: name,
+        email: email,
+        password: password
     }).then(res => {
         console.log(res)
+        this.$router.push({name: 'Home'});
+        msgError = res.data
+        notification = true
     }).catch(err => {
-        console.log(err.response.data.err);
+        console.log(err.response.data.err, ' = ', notification);
+        msgError = err.response.data.err
+        notification = true
     })
+}
+function closeNotification(){
+    msgError = undefined
+    notification = false
 }
 </script>
 

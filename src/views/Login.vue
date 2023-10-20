@@ -1,18 +1,12 @@
 <template>
     <div>
-        <h2>Registro de Usuários</h2>
+        <h2>Login</h2>
         <hr>
         <div class="columns is-centered">
             <div class="column is-half">
                 <div v-if="msgError" class="notification is-danger is-light">
                     <button @click="msgError = null" class="delete"></button>
                     {{ msgError }}
-                </div>
-                <div class="field">
-                    <label class="label has-text-left">Nome completo</label>
-                    <div class="control">
-                        <input type="text" name="name" placeholder="Nome do usuário" class="input" v-model="name">
-                    </div>
                 </div>
                 <div class="field">
                     <label class="label has-text-left">E-mail</label>
@@ -27,10 +21,10 @@
                     </div>
                 </div>
                 <hr>
-                <button class="button is-success" @click="register">Cadastrar</button>
+                <button class="button is-success" @click="login">Acessar</button>
             </div>
         </div>
-    </div>
+    </div>  
 </template>
 <script>
 import axios from 'axios';
@@ -38,21 +32,19 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            name: '',
             email: '',
             password: '',
             msgError:null,
         }
     },
     methods:{
-        register(){
-            axios.post("http://localhost:8686/user", {
-                name: this.name,
+        login(){
+            axios.post("http://localhost:8686/login", {
                 email: this.email,
                 password: this.password
             }).then(res => {
                 console.log(res)
-                this.$router.push({ name: 'Home' });
+                this.$router.push({ name: 'Login' });
             }).catch(err => {
                 console.log(err.response.data.err);
                 this.msgError = err.response.data.err

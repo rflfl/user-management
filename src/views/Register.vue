@@ -4,6 +4,10 @@
         <hr>
         <div class="columns is-centered">
             <div class="column is-half">
+                <div v-if="msgError" class="notification is-danger is-light">
+                    <button @click="msgError = null" class="delete"></button>
+                    {{ msgError }}
+                </div>
                 <div class="field">
                     <label class="label has-text-left">Nome completo</label>
                     <div class="control">
@@ -28,31 +32,35 @@
         </div>
     </div>
 </template>
-
-<script setup>
+<script>
 import { ref } from 'vue'
 import axios from 'axios';
-let name = '', email = '', password = '';
-function register() {
-    axios.post("http://localhost:8686/user", {
-        name: name,
-        email: email,
-        password: password
-    }).then(res => {
-        console.log(res)
-        this.$router.push({name: 'Home'});
-        msgError = res.data
-        notification = true
-    }).catch(err => {
-        console.log(err.response.data.err, ' = ', notification);
-        msgError = err.response.data.err
-        notification = true
-    })
-}
-function closeNotification(){
-    msgError = undefined
-    notification = false
-}
-</script>
 
+export default {
+    data() {
+        return {
+            name: '',
+            email: '',
+            password: '',
+            msgError:null,
+        }
+    },
+    methods:{
+        register(){
+            axios.post("http://localhost:8686/user", {
+                name: this.name,
+                email: this.email,
+                password: this.password
+            }).then(res => {
+                console.log(res)
+                this.$router.push({ name: 'Home' });
+            }).catch(err => {
+                console.log(err.response.data.err);
+                this.msgError = err.response.data.err
+            })
+        }
+    }
+}
+
+</script>
 <style></style>

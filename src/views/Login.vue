@@ -47,10 +47,8 @@ export default {
                 alert(res.data.token)
                 this.$router.push({ name: 'home' });
             }).catch((err) => {
-                if (err.response) {
-                    console.log(err.response.data);
-                    this.msgError = err.response.data
-                }
+                    console.log(err.response.data.err);
+                    this.msgError = err.response.data.err
             })
         }
     }

@@ -24,7 +24,7 @@
                 <button class="button is-success" @click="login">Acessar</button>
             </div>
         </div>
-    </div>  
+    </div>
 </template>
 <script>
 import axios from 'axios';
@@ -34,20 +34,23 @@ export default {
         return {
             email: '',
             password: '',
-            msgError:null,
+            msgError: null,
         }
     },
-    methods:{
-        login(){
+    methods: {
+        login() {
             axios.post("http://localhost:8686/login", {
                 email: this.email,
                 password: this.password
-            }).then(res => {
+            }).then((res) => {
                 localStorage.setItem('token', res.data.token)
-                this.$router.push({ name: 'Home' });
-            }).catch(err => {
-                console.log(err.response.data.err);
-                this.msgError = err.response.data.err
+                alert(res.data.token)
+                this.$router.push({ name: 'home' });
+            }).catch((err) => {
+                if (err.response) {
+                    console.log(err.response.data);
+                    this.msgError = err.response.data
+                }
             })
         }
     }

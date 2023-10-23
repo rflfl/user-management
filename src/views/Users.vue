@@ -18,8 +18,10 @@
           <td>{{ user.name }}</td>
           <td>{{ user.email }}</td>
           <td>{{ user.role == 1 ? 'Administrador' : 'usuario' }}</td>
-          <td><button class="button is-success">Editar</button> <button @click="showDelModal(user.id)"
-              class="button is-danger">Deletar</button></td>
+          <td>
+            <router-link :to="{name: 'Edit', params:{id:user.id}}">
+              <button class="button is-success">Editar</button>
+            </router-link>            <button @click="showDelModal(user.id)" class="button is-danger">Deletar</button></td>
         </tr>
       </tbody>
     </table>
@@ -48,7 +50,7 @@ export default {
   created() {
     let req = {
       headers: {
-        Authorization: "Baarer " + localStorage.getItem('token')
+        Authorization: "Bearer " + localStorage.getItem('token')
       }
     }
     axios.get("http://localhost:8686/user", req)

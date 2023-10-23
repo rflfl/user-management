@@ -3,13 +3,14 @@ import HomeView from '../views/HomeView.vue'
 import Register from '../views/Register.vue'
 import Login from '../views/Login.vue'
 import Users from '../views/Users.vue'
+import Edit from '../views/Edit.vue'
 import axios from 'axios'
 
 function AdminAuth(to, from, next) {
   if (localStorage.getItem('token') != undefined) {
     let req = {
       headers: {
-        Authorization: "Baarer " + localStorage.getItem('token')
+        Authorization: "Bearer " + localStorage.getItem('token')
       }
     }
     axios.post("http://localhost:8686/validate", {}, req).then((res) => {
@@ -46,6 +47,12 @@ const router = createRouter({
       path: '/admin/users',
       name: 'Users',
       component: Users,
+      beforeEnter: AdminAuth
+    },
+    {
+      path: '/admin/users/edit/:id',
+      name: 'Edit',
+      component: Edit,
       beforeEnter: AdminAuth
     },
     {

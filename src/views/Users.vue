@@ -18,10 +18,27 @@
           <td>{{ user.name }}</td>
           <td>{{ user.email }}</td>
           <td>{{ user.role == 1 ? 'Administrador' : 'usuario' }}</td>
-          <td><button class="button is-success">Editar</button> <button class="button is-danger">Deletar</button></td>
+          <td><button class="button is-success">Editar</button> <button @click="showDelModal(user.id)"
+              class="button is-danger">Deletar</button></td>
         </tr>
       </tbody>
     </table>
+    <div :class="{ modal: true, 'is-active': showModal }">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Excluir registro</p>
+          <button class="delete" @click="showModal = !showModal" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <p>Você deseja excluir este usuário?</p>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button" @click="showModal = !showModal">Cancel</button>
+          <button class="button is-success" @click="deleteUser()">Sim, excluir usuário!</button>
+        </footer>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -45,7 +62,32 @@ export default {
   },
   data() {
     return {
-      users: []
+      users: [],
+      showModal: false,
+      deleteUserId: -1
+    }
+  },
+  methods: {
+    showDelModal(id) {
+      this.showModal = true
+      this.deleteUserId = id
+    },
+    deleteUser(id) {
+      let req = {
+        headers: {
+          Authorization: "Baarer " + localStorage.getItem('token')
+        }
+      }
+      axios.delete("http://localhost:8686/user/"+this.deleteUserId, req)
+      .then((res) => {
+        console.log(res)
+        this.showModal = false;
+        this.users = this.users.filter(u => u.id != this.deleteUserId)
+      })
+      .catch((err) => {
+        console.log(err)
+        this.showModal = false;
+      })
     }
   },
   filters: {
